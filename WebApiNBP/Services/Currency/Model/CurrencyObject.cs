@@ -11,6 +11,8 @@ namespace WebApiNBP.Services.Currency.Model
         public string Code { get; set; } //Code
         public string CourseNumber { get; set; } //No
         public string EffectiveDate { get; set; } //EffectiveDate
+
+        [DisplayFormat(DataFormatString = "{0:n4}")]
         public decimal CurrencyValue { get; set; } //Mid
     }
 }

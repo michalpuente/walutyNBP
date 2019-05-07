@@ -4,42 +4,130 @@
     ViewData["Title"] = "Index";
 }
 
+@using (Html.BeginForm(FormMethod.Post, new { id = "myForm" }))
+{
+    <div class="container">
+        <div class="container currencies">
+            <h4>
+                <select id="selectCurrency" name="currency" onchange="this.form.submit(value)">
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="GBP">GBP</option>
+                </select>
+            </h4>
+            <div class="container">
+                <input onchange="makeFieldsReadonly()" type="radio" id="monthRadio" />
+                <label style="text-align:left; padding-right:20px">Obecny miesiąc</label>
+            </div>
+            <div class="container">
+                <input onchange="makeFieldsReadonly()" type="radio" id="dayRadio" />
+                <label style="text-align:left; padding-right:20px">Ilość dni</label>
+                <input id="daysTbx" placeholder="max 255" name="count" type="number" value="@ViewBag.NumberOfDays" style="width:80px" />
+            </div>
+            <br />
+            <input type="submit" value="Wczytaj" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EffectiveDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyValue)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+            <hr />
+            <h5>@ViewBag.CourseName</h5>
+        </div>
+    </div>
+}
+
+<div class="container">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CourseNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EffectiveDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CurrencyValue)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EffectiveDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyValue)
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EffectiveDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrencyValue)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+		makeFieldsReadonly();
+
+		document.getElementById('selectCurrency').value = '@ViewBag.Currency';
+
+		function makeFieldsReadonly()
+        {
+            console.log('start');
+
+			var dayRadio = document.getElementById('dayRadio');
+		    var dateRadio = document.getElementById('dateRadio');
+		    var monthRadio = document.getElementById('monthRadio');
+
+			if (@ViewBag.Radio == 1)
+				$("#monthRadio").prop('checked', true);
+			if (@ViewBag.Radio == 2)
+				$("#dayRadio").prop('checked', true);
+			if (@ViewBag.Radio == 3)
+				$("#dateRadio").prop('checked', true);
+
+		}
+
+        $(document).ready(function () {
+            $('input[type=radio]').change(function () {
+                if (this.checked) {
+                    $(this).closest('.currencies')
+                        .find('input[type=radio]').not(this)
+                        .prop('checked', false);
+                }
+            });
+        });
+
+
+        $(document).submit(function () {
+
+            var dayRadio = document.getElementById('dayRadio');
+            var dateRadio = document.getElementById('dateRadio');
+            var monthRadio = document.getElementById('monthRadio');
+
+            if (dayRadio.checked) {
+                $("#dateFromTbx").val(null);
+                $("#dateToTbx").val(null);
+
+            }
+            else if (dateRadio.checked) {
+                $("#daysTbx").val(null);
+
+            }
+            else {
+                $("#dateFromTbx").val(null);
+                $("#dateToTbx").val(null);
+                $("#daysTbx").val(null);
+            }
+        });
+</script>
+
 
