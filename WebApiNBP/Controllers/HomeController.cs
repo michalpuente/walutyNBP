@@ -19,7 +19,7 @@ namespace WebApiNBP.Controllers
             _currencyDataObject = currencyDataObject;
         }
 
-        public IActionResult Index(string currency, int? count)
+        public IActionResult Index(string currency, int? count, DateTime? dateFrom, DateTime? dateTo)
         {
             if (currency == null)
             {
@@ -34,7 +34,24 @@ namespace WebApiNBP.Controllers
             ViewBag.Currency = currency.ToUpper(); //np. EUR, USD
             ViewBag.NumberOfDays = count;
 
-            if (count.HasValue)
+            if (dateFrom == null)
+                ViewBag.DateFrom = monthStart.ToString("yyyy-MM-dd");
+            else
+                ViewBag.DateFrom = dateFrom.Value.ToString("yyyy-MM-dd");
+
+            if (dateTo == null)
+                ViewBag.DateTo = todayDate.ToString("yyyy-MM-dd");
+            else
+                ViewBag.DateTo = dateTo.Value.ToString("yyyy-MM-dd");
+
+
+            if (dateFrom.HasValue && dateTo.HasValue && dateFrom <= dateTo)
+            {
+                currencyList = _currencyDataObject.GetDateFromTo(currency.ToLower(), (DateTime)dateFrom, (DateTime)dateTo);
+                ViewBag.CourseName = $"Zestawienie kursów z dni : {dateFrom.Value.ToString("dd/MM/yyyy")} - {dateTo.Value.ToString("dd/MM/yyyy")}";
+                ViewBag.Radio = 3;
+            }
+            else if (count.HasValue)
             {
                 currencyList = _currencyDataObject.GetLastDays(currency.ToLower(), (int)count);
                 ViewBag.CourseName = $"Ostatnie {count} odczytów";

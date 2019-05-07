@@ -25,6 +25,15 @@
                 <input id="daysTbx" placeholder="max 255" name="count" type="number" value="@ViewBag.NumberOfDays" style="width:80px" />
             </div>
             <br />
+            <div class="container">
+                <input onchange="makeFieldsReadonly()" type="radio" id="dateRadio" />
+                <label style="text-align:left; padding-right:20px">Data od</label>
+                <input id="dateFromTbx" type="date" name="dateFrom" value="@ViewBag.DateFrom" />
+
+                <label style="text-align:left; padding-right:20px">Data do</label>
+                <input id="dateToTbx" type="date" name="dateTo" value="@ViewBag.DateTo" />
+            </div>
+            <br />
             <input type="submit" value="Wczytaj" />
 
             <hr />
